@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Jacques+Francois&family=Vidaloka&display=swap');
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.body-background {
+    background-image: url("../images/bg.png");
+    background-size: cover;
+    background-repeat: no-repeat;
+    color: #FFFFFF;
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: 'Jacques Francois', serif; /* Перенесено сюда для единообразия */
+}
+
+body, input, textarea, button {
+    font-family: 'Jacques Francois', serif; /* Оставлено для совместимости */
+}
+
+.credits {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    font-family: 'Vidaloka', serif;
+}
+
+.text-container {
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+}
+
+.bill-murray {
+    font-size: 1.2em;
+    letter-spacing: 50%;
+    text-shadow: 1px 1px black;
+    margin-bottom: 0.5em;
+    color: #2F3894;
+}
+
+.subtitle {
+    font-size: 0.7em;
+}
+
+.groundhog-day {
+    font-size: 3em;
+    color: #C61413;
+    text-shadow: 2px 2px black;
+    margin-top: -0.1em;
+}
+
+.enter-button {
+    font-family: 'Vidaloka', serif;
+    background-color: black;
+    color: white;
+    padding: 10px 50px;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2em;
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+}
+
+#clock-container {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    background-image: url('../images/clock.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin: 50px auto;
+}
+
+#clock-transformer {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    transform: rotateX(10deg) rotateY(30deg) rotateZ(-20deg);
+}
+
+.hand {
+    position: absolute;
+    transition: transform 0.5s cubic-bezier(0.4, 2.08, 0.55, 0.44);
+    filter: drop-shadow(1px 1px 0 #222);
+}
+
+#hour-hand {
+    top: 96.6px;
+    left: 121.2px;
+    width: 24px;
+    height: 67.5px;
+    transform-origin: 50.5% 89.1%;
+}
+
+#minute-hand {
+    top: 74px;
+    left: 122px;
+    width: 25px;
+    height: 90px;
+    transform-origin: 46.5% 92.5%;
+}

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <title>Домашняя страница</title>
+    <link rel="stylesheet" href="styles/clock.css"/>
+    <script type="text/javascript" src="scripts/clock.js" defer="defer"/>
+</h:head>
+
+<h:body styleClass="body-background">
+
+    <h:outputText styleClass="credits" value="Task №83395&lt;br/&gt;Developed by Gleb Kiva&lt;br/&gt;from P3208 Student Group" escape="false"/>
+<!--    <div style="white-space: pre-wrap"><h:outputText value="" escape="false"/></div>-->
+
+    <h:panelGroup styleClass="text-container">
+        <h:outputText styleClass="bill-murray" value="Bill Murray"/>
+        <h:outputText styleClass="subtitle" value="He's having the day of his life..."/>
+        <h:outputText styleClass="subtitle" value="over and over again"/>
+        <h:outputText styleClass="groundhog-day" value="Groundhog Day"/>
+    </h:panelGroup>
+
+    <h:panelGroup id="clock-container">
+        <h:panelGroup id="clock-transformer">
+            <h:panelGroup id="hour-hand" styleClass="hand"
+                          style="background-image: url('images/hour_hand.png'); background-size: contain; background-repeat: no-repeat;">
+                <h:panelGroup/>
+            </h:panelGroup>
+            <h:panelGroup id="minute-hand" styleClass="hand"
+                          style="background-image: url('images/minute_hand.png'); background-size: contain; background-repeat: no-repeat;"/>
+        </h:panelGroup>
+    </h:panelGroup>
+
+    <h:button type="button"  outcome="redirectToShooter" styleClass="enter-button" value="Enter"/>
+
+</h:body>
+
+</html>

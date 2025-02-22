@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="jakarta.faces.facelets"
+>
+<!--xmlns:f="http://xmlns.jcp.org/jsf/core"-->
+
+<h:head>
+    <title>Стрелять в фигуры!</title>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="styles/shooter.css"/>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="scripts/graph.js"></script>
+</h:head>
+
+<h:body>
+    <div id="content" class="flexable-section flexable-row" style="gap: 15px">
+        <div id="graph-section" class="container"
+             style="cursor: pointer;"
+             onclick="handleGraphClick(this, event)">
+            <div class="overlay"/>
+            <h:panelGroup id="graph-component">
+                <h:outputText value="#{shotHandlerBean.shotsAsJson}" style="display: none"/>
+                <svg id="graph-view"
+                     data-radius="#{shotHandlerBean.shapeRadius}"
+                     data-points="#{shotHandlerBean.shotsAsJson}"/>
+            </h:panelGroup>
+        </div>
+
+        <div id="actions-section" class="flexable-column container">
+            <div id="results-section">
+                <h:dataTable class="result-table" id="result" var="res" value="#{shotHandlerBean.shots}"
+                             style="width: 100%">
+                    <h:column>
+                        <f:facet name="header">X</f:facet>
+                        #{ mathBean.roundDecimal(res.shotX) }
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Y</f:facet>
+                        #{mathBean.roundDecimal(res.shotY)}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">R</f:facet>
+                        #{res.shapeRadius}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Result</f:facet>
+                        #{res.result ? "Spot on" : "Missed"}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Timestamp</f:facet>
+                        #{res.timestamp}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Execution time</f:facet>
+                        #{res.executionTime} ns
+                    </h:column>
+                </h:dataTable>
+            </div>
+            <h:form id="shooterFormHidden" style="display: none;">
+                <h:inputHidden id="xHidden" value="${shotHandlerBean.shotXHidden}" required="true">
+                    <f:validateDoubleRange minimum="-5" maximum="5"/>
+                </h:inputHidden>
+                <h:inputHidden id="yHidden" value="${shotHandlerBean.shotYHidden}" required="true">
+                    <f:validateDoubleRange minimum="-5" maximum="5"/>
+                </h:inputHidden>
+                <p:commandButton
+                        id="submitFormHidden"
+                        action="#{shotHandlerBean.addShot(shotHandlerBean.shotXHidden, shotHandlerBean.shotYHidden)}"
+                        process="@form"
+                        update="@form result"
+                        oncomplete="#{shotHandlerBean.updateSvg()}"
+                        style="display:none;"/>
+            </h:form>
+            <div id="form-section">
+                <h:form id="shooterForm">
+                    <!-- X Coordinate -->
+                    <span>Choose X coordinate of the shot:</span>
+                    <h:panelGroup id="xSelectionBlock" layout="div" style="display: flex;
+                        gap: 5px;
+                        margin-top: 5px;
+                        width: 100%;
+                        background: var(--background-l2-color);
+                        outline: none;
+                        border: none;
+                        padding: 10px;
+                        border-radius: var(--border-radius);
+                        overflow-x: scroll;
+                        white-space: nowrap;">
+                        <ui:repeat var="value" value="#{shotHandlerBean.shotXRange}">
+                            <p:selectBooleanCheckbox value="#{shotHandlerBean.XSelectionMap[value]}">
+                                <p:ajax event="change"
+                                        listener="#{shotHandlerBean.handleXSelectionChange}"
+                                        update=":shooterForm:xSelectionBlock"/>
+                            </p:selectBooleanCheckbox>
+                            <h:outputLabel value="#{value}"/>
+                        </ui:repeat>
+                        <h:inputHidden id="xSelected" value="${shotHandlerBean.shotX}"
+                                       required="true"
+                                       requiredMessage="X coordinate is required"
+                                       validator="#{shotHandlerBean.validateXSelection}"/>
+                    </h:panelGroup>
+                    <h:message for="xSelected" style="color: red; margin-top: 5px;"/>
+                    <!-- Y Coordinate -->
+                    <span style="margin-top: 10px; display: block;">Enter Y coordinate of the shot:</span>
+                    <h:inputText id="yInput" value="#{shotHandlerBean.shotY}"
+                                 style="width: 100%; margin-top: 5px;"
+                                 required="true"
+                                 requiredMessage="Y coordinate is required"
+                                 converterMessage="Cannot convert Y value to double"
+                                 validatorMessage="Y should be a double between -5 and 5">
+                        <f:validateDoubleRange minimum="-5" maximum="5"/>
+                    </h:inputText>
+                    <h:message for="yInput" style="color: red; margin-top: 5px;"/>
+                    <!-- Radius -->
+                    <span style="margin-top: 10px; display: block;">Choose the figure's radius:</span>
+                    <h:inputText id="radiusValue"
+                                 style="background: none; text-align: center; width: 100%;"
+                                 value="#{shotHandlerBean.shapeRadius}"
+                                 required="true"
+                                 requiredMessage="Radius is required"
+                                 converterMessage="Cannot convert Radius value to double"
+                                 validatorMessage="Radius should be a double from 1 to 4 with .25 step">
+                        <f:validateDoubleRange minimum="1" maximum="4"/>
+                        <f:validator validatorId="radiusValidator"/>
+                        <p:ajax event="keyup" execute="@this" render="@this radiusSlider"/>
+                    </h:inputText>
+                    <h:message for="radiusValue"
+                               style="color: red; text-align: center; margin-bottom: 8px; display: block;"/>
+                    <p:slider id="radiusSlider"
+                              for="radiusValue"
+                              minValue="1" maxValue="4" step="0.25">
+                        <p:ajax process="@this radiusValue" update="radiusValue radiusSlider"/>
+                    </p:slider>
+                    <!-- Submit Button -->
+                    <p:commandButton
+                            value="Fire"
+                            action="#{shotHandlerBean.addShot(shotHandlerBean.shotX, shotHandlerBean.shotY)}"
+                            style="width: 100%; margin-top: 20px;"
+                            process="@form"
+                            update="shooterForm"
+                            oncomplete="#{shotHandlerBean.updateSvg()}"
+                    />
+                    <p:commandButton
+                            value="Reset"
+                            action="#{shotHandlerBean.reset()}"
+                            style="width: 100%; margin-top: 5px; background: indianred"
+                            update="result"
+                            immediate="true"
+                            oncomplete="#{shotHandlerBean.updateSvg()}"
+                    />
+                    <h:button type="button" outcome="redirectToWelcome" style="width: 100%; margin-top: 5px;"
+                              value="Back to Homepage"/>
+                </h:form>
+            </div>
+        </div>
+    </div>
+    <p:dialog id="errorDialog" widgetVar="errorDialog" modal="true"
+              header="Error" resizable="false" closable="true">
+        <p:messages id="errorMessages" showDetail="true" closable="true"/>
+        <p:commandButton value="Close" onclick="PF('errorDialog').hide()" type="button"/>
+    </p:dialog>
+</h:body>
+</html>

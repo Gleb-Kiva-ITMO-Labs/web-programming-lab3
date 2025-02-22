@@ -1,0 +1,28 @@
+plugins {
+  id 'java'
+  id 'war'
+}
+
+group 'ru.s408766.shooter'
+version '1.0-SNAPSHOT'
+
+repositories {
+  mavenCentral()
+}
+
+ext {
+  junitVersion = '5.10.2'
+}
+
+tasks.withType(JavaCompile) {
+  options.encoding = 'UTF-8'
+}
+
+dependencies {
+  compileOnly('jakarta.platform:jakarta.jakartaee-web-api:10.0.0')
+  implementation ('org.primefaces:primefaces:14.0.5:jakarta')
+  implementation 'com.google.code.gson:gson:2.12.1'
+  implementation 'org.postgresql:postgresql:42.7.2'
+  implementation 'org.projectlombok:lombok:1.18.34'
+  annotationProcessor 'org.projectlombok:lombok:1.18.34'
+}

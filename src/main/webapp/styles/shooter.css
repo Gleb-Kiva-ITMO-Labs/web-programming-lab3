@@ -1,0 +1,338 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato');
+
+:root {
+    --content-offset: 14px;
+    --header-height: 50px;
+    --border-width: 0.8px;
+    --border-radius: 5px;
+    --border: var(--border-width) solid var(--border-color);
+    --sm-border-radius: 5px;
+    --sm-text-size: 14px;
+    --md-text-size: 20px;
+    --bg-text-size: 23px;
+    --background-l0-color: #171717;
+    --background-l1-color: #212123;
+    --background-l2-color: #2e2e30;
+    --background-error: #5c2c2c;
+    --text-color: #FFFFFF;
+    --text-color-disabled: #656565;
+    --text-color-error: #e88585;
+    --border-color: #232426;
+    --accent-color: #F05D23;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: "Lato", sans-serif;
+    font-size: var(--sm-text-size);
+    color: var(--text-color);
+    resize: none;
+    user-select: none !important;
+    box-sizing: border-box;
+}
+
+*:not(input[type="checkbox"]) {
+    appearance: none;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+input[type=number]:focus {
+    outline: none;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+* {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--background-l0-color);
+}
+
+img {
+    pointer-events: none
+}
+
+.container {
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    border: var(--border);
+}
+
+.overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background: radial-gradient(rgba(23, 23, 23, 0), rgba(23, 23, 23, 0.1), rgba(23, 23, 23, 0.8));
+}
+
+.flexable-row {
+    display: flex;
+    flex-flow: row nowrap;
+}
+
+.flexable-column {
+    display: flex;
+    flex-flow: column nowrap;
+}
+
+.flexable-section {
+    flex: 1 0 auto;
+}
+
+
+table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+thead {
+    position: sticky;
+    top: -1px;
+    z-index: 1;
+}
+
+tr:not(thead tr) {
+    transition: 0.1s all ease-in-out;
+    outline: #F05D2300 1px solid;
+    outline-offset: -1px;
+}
+
+tr:hover {
+    outline: #F05D23FF 1px solid;
+}
+
+tbody:hover tr {
+    background: var(--background-l0-color);
+}
+
+th, td {
+    padding: 5px;
+    text-align: center;
+    border-collapse: collapse;
+    border: var(--border);
+}
+
+thead th {
+    background: var(--background-l1-color)
+}
+
+.filled-row {
+    background: var(--border-color);
+}
+
+.filled-row td {
+    padding: 3px;
+    color: var(--text-color-disabled);
+    font-size: 10px;
+}
+
+input:not(.button-toggle *), button {
+    padding: 10px;
+    background: var(--background-l2-color);
+    border-radius: var(--border-radius);
+    border: var(--border);
+    display: block;
+}
+
+input:not(.button-toggle *)::placeholder {
+    color: var(--text-color-disabled) !important;
+}
+
+input[type="submit"] {
+    background: var(--accent-color);
+    border: none;
+}
+
+input[type="submit"], input[type="button"] {
+    cursor: pointer;
+    transition: 0.1s all ease-in-out;
+}
+
+input[type="submit"]:hover, input[type="button"]:hover {
+    transform: scale(1.01);
+}
+
+/* !content */
+#content {
+    padding: var(--content-offset);
+    width: 100vw;
+    height: 100vh;
+    border-collapse: collapse;
+    border: none;
+}
+
+/* !header */
+#header {
+    width: 100%;
+    height: var(--header-height);
+    padding: var(--content-offset) 10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#header-logo {
+    height: 100%;
+}
+
+/* !shooting-section */
+#graph-section, #graph-view {
+    width: calc(min(100vh - var(--header-height) - var(--content-offset), 100vw - 300px));
+    height: calc(min(100vh - var(--header-height) - var(--content-offset), 100vw - 300px));
+}
+
+#actions-section {
+    flex: 1;
+    min-width: 0;
+}
+
+#results-section {
+    flex-grow: 1;
+    flex-basis: 0;
+    overflow: auto;
+    position: relative;
+}
+
+
+#form-section {
+    padding: 10px;
+    border-top: var(--border);
+    background: var(--background-l1-color);
+}
+
+/* !button-toggle */
+.button-toggle {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: stretch;
+    overflow: hidden;
+    overflow-x: scroll;
+    width: 100%;
+}
+
+.button-toggle input {
+    position: absolute !important;
+    clip: rect(0, 0, 0, 0);
+    height: 1px;
+    width: 1px;
+    border: 0;
+    overflow: hidden;
+}
+
+.button-toggle label {
+    background: var(--background-l2-color);
+    border: var(--border);
+    color: var(--text-color-disabled);
+    font-size: 14px;
+    line-height: 1;
+    text-align: center;
+    padding: 8px 16px;
+    margin-right: -1px;
+    transition: all 0.08s ease-in-out;
+    flex: 1;
+}
+
+.button-toggle label:hover {
+    cursor: pointer;
+}
+
+.button-toggle input:checked + label {
+    background-color: var(--background-l0-color);
+    color: var(--text-color);
+    box-shadow: none;
+}
+
+.button-toggle label:first-of-type {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+}
+
+.button-toggle label:last-of-type {
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+.options-select {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.options-select input {
+    padding: 5px;
+}
+
+.options-select label {
+    padding: 2px 4px;
+}
+
+.error-message {
+    display: none;
+    padding: 10px;
+    background: var(--background-error);
+    color: var(--text-color-error);
+    border-radius: var(--border-radius);
+}
+
+.tooltip-container {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-container span {
+    color: var(--text-color-error);
+    opacity: 1;
+    transition: 0.1s opacity ease-in-out;
+}
+
+.tooltip {
+    display: none;
+    position: absolute;
+    z-index: 999999;
+    bottom: 10px;
+    right: 50%;
+    margin-right: calc(-50% + 10px);
+    width: calc(100% - 20px);
+}
+
+.tooltip-container:hover .tooltip {
+    display: block;
+}
+
+.tooltip-container:hover span {
+    opacity: 0.6;
+}
+
+#errorDialog_content, .ui-dialog-titlebar {
+    background: var(--background-l2-color) !important;
+}
+
+.ui-messages-error span {
+    color: var(--background-l2-color) !important;
+}
+
+.ui-messages-warn span {
+    color: var(--background-l2-color) !important;
+}
